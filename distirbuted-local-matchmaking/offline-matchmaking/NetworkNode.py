@@ -14,9 +14,10 @@ class NetworkNode:
         self.neighbors = []
         self.NOR_CONSTANT = 20
         
-    def calculate_new_cr(self, result): #result es 1 o 0
+    def calculate_new_cr(self, result): #result es 1 o 0 1 es ganar 0 es perder
         self.CR = self.CR + (result - self.expected_result)*self.CR_CONSTANT
         self.whoIheard = [] #forget this round
+        return self.CR
         
     def heard_someone(self, other_cr):
         self.whoIheard.append(other_cr)
@@ -54,7 +55,7 @@ class NetworkNode:
         return counter
     
     def supreme_heard(self):
-        supreme = self.max(self.whoIheard)
+        supreme = max(self.whoIheard)
         if supreme > self.CR:
             return supreme
         else:

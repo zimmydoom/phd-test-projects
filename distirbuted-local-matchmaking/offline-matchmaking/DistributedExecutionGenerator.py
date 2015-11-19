@@ -14,7 +14,7 @@ def read_dataset(self):
     """  takes the node data from a GML file and creates a simple 
          list of node ids.
     """
-    node_list= []
+    node_list= range(0,20)
     return node_list
 
 
@@ -59,3 +59,29 @@ def make_winner_list(self,size):
             winner_list.append(num)
     return winner_list
     
+
+def execute_test(self, exec_list, node_list):
+    CR_list = []
+    for x in range(len(node_list)):
+        CR_list.append(100)
+    main_index = 0
+    decision_index = 0
+    while main_index < len(exec_list):
+        for node in node_list:
+            executor = NetworkNode(node,CR_list[node])
+            loop_index = main_index
+            while exec_list[loop_index] != ():
+                 pareja = exec_list[loop_index]
+                 if node[0] == pareja[1]: #recibimos un mensae
+                    executor.heard_someone(CR_list[pareja[0]])
+                 loopindex += 1
+            decision_index = loop_index + 1
+            if node in exec_list[decision_index]:
+                CR_list[node] = executor.calculate_new_cr(1)
+            else:
+                CR_list[node] = executor.calculate_new_cr(0)
+        main_index = decision_index + 1
+    return CR_list
+    
+    
+#def read_rtt_matrix(self,size):
