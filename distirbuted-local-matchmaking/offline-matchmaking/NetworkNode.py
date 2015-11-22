@@ -10,12 +10,14 @@ class NetworkNode:
     def __init__(self,name, starting_CR):
         self.name = name
         self.CR = starting_CR
+        self.CR_CONSTANT = 1
         self.whoIheard = []
         self.neighbors = []
         self.NOR_CONSTANT = 20
         
     def calculate_new_cr(self, result): #result es 1 o 0 1 es ganar 0 es perder
-        self.CR = self.CR + (result - self.expected_result)*self.CR_CONSTANT
+        expected =self.expected_result()
+        self.CR = self.CR + (result - expected)*self.CR_CONSTANT
         self.whoIheard = [] #forget this round
         return self.CR
         
@@ -31,12 +33,12 @@ class NetworkNode:
             alfa = self.NOR_CONSTANT
             beta = 2
         elif how_many_above <= how_many_below:
-            alfa = 1/(sup - self.CR + 1) * self.NOR_CONSTANT  # Aqui puede haber una constante 
+            alfa = float(1)/(sup - self.CR + 1) * self.NOR_CONSTANT  # Aqui puede haber una constante 
             beta = 2
         else:
             alfa = 2
-            beta = (sup - self.CR) / self.NOR_CONSTANT
-        mean= alfa / alfa + beta 
+            beta = float(sup - self.CR) / self.NOR_CONSTANT
+        mean= float(alfa) / float(alfa) + float(beta) 
         return mean
     
     def count_greater_list(self): #eventualmente optimizar esto
