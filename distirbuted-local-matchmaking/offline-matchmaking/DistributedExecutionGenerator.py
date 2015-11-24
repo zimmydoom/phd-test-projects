@@ -51,48 +51,53 @@ def make_winner_list(size):
     
     """
     winner_list = []
-    numbers = range(1,size+1)
+    numbers = range(size)
     for num in numbers:
         denom = size/4
         pr = float(num+1)/float(size+denom)
         ap = 1 - pr
-        print repr(pr)
+        #print repr(pr)
         coin = nrandom([0,1],1,replace=False,p=[ap,pr])
-        print repr(coin)
+        #print repr(coin)
         if coin[0] == 1:
             winner_list.append(num)
     return winner_list
     
 
 def execute_test(exec_list, node_list):
+    how_many_wins = [0 for x in range(len(node_list))]
     CR_list = []
     for x in range(len(node_list)):
-        CR_list.append(100)
+        CR_list.append(1000)
     main_index = 0
     decision_index = 0
     while main_index < len(exec_list):
         for node in node_list:
-            executor = NetworkNode(node,CR_list[node])
+            executor = NetworkNode(node,CR_list[node],250)
             loop_index = main_index
             while exec_list[loop_index] != ():
                  pareja = exec_list[loop_index]
-                 if node == pareja[1]: #recibimos un mensae
+                 if node == pareja[1]: #recibimos un mensaje
                     executor.heard_someone(CR_list[pareja[0]])
                  loop_index += 1
             decision_index = loop_index + 1
             if node in exec_list[decision_index]:
                 CR_list[node] = executor.calculate_new_cr(1)
+                how_many_wins[node] += 1
             else:
                 CR_list[node] = executor.calculate_new_cr(0)
         main_index = decision_index + 1
+    print repr(how_many_wins)
     return CR_list
-    
+ 
+def analyze(cr_list):
+    print 'stuff'   
 
 def main():
     test_nodes = read_dataset()
-    print repr(test_nodes)
-    ex_list = generate_execution(10,[],test_nodes)
-    print repr(ex_list)
+    #print repr(test_nodes)
+    ex_list = generate_execution(40,[],test_nodes)
+    #print repr(ex_list)
     cr_result = execute_test(ex_list,test_nodes)
     print repr(cr_result)
     
