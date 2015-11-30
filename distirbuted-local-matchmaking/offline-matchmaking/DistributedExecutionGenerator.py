@@ -11,11 +11,13 @@ from numpy.random import choice as nrandom
 
 
 
-def read_dataset():
+__winning_list__ = []
+
+def read_dataset(how_many_nodes):
     """  takes the node data from a GML file and creates a simple 
          list of node ids.
     """
-    node_list= range(0,20)
+    node_list= range(how_many_nodes)
     return node_list
 
 
@@ -65,15 +67,18 @@ def make_winner_list(size):
     
 
 def execute_test(exec_list, node_list):
-    how_many_wins = [0 for x in range(len(node_list))]
+
     CR_list = []
+    global __winning_list__ 
+    __winning_list__= []
     for x in range(len(node_list)):
         CR_list.append(1000)
+        __winning_list__.append(0)
     main_index = 0
     decision_index = 0
     while main_index < len(exec_list):
         for node in node_list:
-            executor = NetworkNode(node,CR_list[node],250)
+            executor = NetworkNode(node,CR_list[node],250,20)
             loop_index = main_index
             while exec_list[loop_index] != ():
                  pareja = exec_list[loop_index]
@@ -83,24 +88,42 @@ def execute_test(exec_list, node_list):
             decision_index = loop_index + 1
             if node in exec_list[decision_index]:
                 CR_list[node] = executor.calculate_new_cr(1)
-                how_many_wins[node] += 1
+                __winning_list__[node] += 1
             else:
                 CR_list[node] = executor.calculate_new_cr(0)
         main_index = decision_index + 1
-    print repr(how_many_wins)
     return CR_list
  
 def analyze(cr_list):
     print 'stuff'   
 
 def main():
-    test_nodes = read_dataset()
-    #print repr(test_nodes)
-    ex_list = generate_execution(40,[],test_nodes)
-    #print repr(ex_list)
-    cr_result = execute_test(ex_list,test_nodes)
-    print repr(cr_result)
+    num_nodes = 1000
+    global __winning_list__
+    cr_averages = [0 for x in range(num_nodes)]
+    win_averages = [0 for x in range(num_nodes)]
+    for x in range(20):
+        test_nodes = read_dataset(num_nodes)
+        #print repr(test_nodes)
+        ex_list = generate_execution(40,[],test_nodes)
+        #print repr(ex_list)
+        cr_result = execute_test(ex_list,test_nodes)
+        for x in range(num_nodes):
+            cr_averages[x] += cr_result[x] 
+            win_averages[x] += __winning_list__[x]
+    for x in range(num_nodes):
+        cr_averages[x] = float(cr_averages[x])/20.0
+        win_averages[x] = float(win_averages[x])/20.0
     
+    f = open('1000node40times.data','w') #escribir para gnuplot
+    
+    for x in range(num_nodes):
+        s= "{0} {1:.4f}  {2:.4f}\n".format(x,cr_averages[x],win_averages[x])
+        f.write(s)
+    
+    f.close()
+    print repr(cr_averages)
+    print repr(win_averages)
 
 
 if __name__ == '__main__':

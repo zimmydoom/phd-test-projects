@@ -7,25 +7,32 @@ class NetworkNode:
     CR_CONSTANT = 1
     
     
-    def __init__(self,name, starting_CR,minimum_CR):
+    def __init__(self,name, starting_CR,minimum_CR,cr_adjust):
         self.name = name
         self.CR = starting_CR
         self.minimum = minimum_CR
-        self.CR_CONSTANT = 20
+        self.CR_CONSTANT = cr_adjust
         self.whoIheard = []
         self.neighbors = []
         self.NOR_CONSTANT = 20
         
     def calculate_new_cr(self, result): #result es 1 o 0 1 es ganar 0 es perder
         expected =self.expected_result()
-        if self.name == 19 and result == 1:
-            print 'CR antes :'
-            print repr(self.CR)
-            print repr(expected)
+        #if self.name == 19 and result == 1:
+         #   print 'CR antes ganando :'
+          #  print repr(self.CR)
+           # print repr(expected)
+        #if self.name == 19 and result == 0:
+         #   print 'CR antes perdiendo'
+          #  print repr(self.CR)
+           # print repr(expected)
         self.CR = self.CR + (result - expected)*self.CR_CONSTANT
-        if self.name == 19 and result == 1:
-            print 'CR nuevo :'
-            print repr(self.CR)
+        #if self.name == 19 and result == 1:
+         #   print 'CR nuevo ganando:'
+          #  print repr(self.CR)
+        #if self.name == 19 and result == 0:
+         #   print 'CR nuevo perdiendo'
+          #  print repr(self.CR)
         if self.CR < self.minimum:
             self.CR = self.minimum
         #if self.name == 19 and result ==1:
