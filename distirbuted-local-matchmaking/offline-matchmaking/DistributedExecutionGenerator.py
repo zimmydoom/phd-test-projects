@@ -55,7 +55,7 @@ def make_winner_list(size):
     winner_list = []
     numbers = range(size)
     for num in numbers:
-        denom = size/4
+        denom = float(size)/4.0
         pr = float(num+1)/float(size+denom)
         ap = 1 - pr
         #print repr(pr)
@@ -98,14 +98,14 @@ def analyze(cr_list):
     print 'stuff'   
 
 def main():
-    num_nodes = 1000
+    num_nodes = 50
     global __winning_list__
     cr_averages = [0 for x in range(num_nodes)]
     win_averages = [0 for x in range(num_nodes)]
     for x in range(20):
         test_nodes = read_dataset(num_nodes)
         #print repr(test_nodes)
-        ex_list = generate_execution(40,[],test_nodes)
+        ex_list = generate_execution(80,[],test_nodes)
         #print repr(ex_list)
         cr_result = execute_test(ex_list,test_nodes)
         for x in range(num_nodes):
@@ -115,7 +115,7 @@ def main():
         cr_averages[x] = float(cr_averages[x])/20.0
         win_averages[x] = float(win_averages[x])/20.0
     
-    f = open('1000node40times.data','w') #escribir para gnuplot
+    f = open('50node80times.data','w') #escribir para gnuplot
     
     for x in range(num_nodes):
         s= "{0} {1:.4f}  {2:.4f}\n".format(x,cr_averages[x],win_averages[x])
